@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        /* Add some basic styling */
+        .json-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game List</h1>
+    <div id="json-container" class="json-container">
+        <!-- JSON data will be displayed here -->
+    </div>
+
+    <script>
+        // Fetch the JSON data from the endpoint
+        fetch('https://gasgamebackend.sglombicki.com/gameList')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display the JSON data in the HTML
+                const container = document.getElementById('json-container');
+                container.textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    </script>
+</body>
+</html>
