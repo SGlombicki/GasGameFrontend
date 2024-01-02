@@ -13,7 +13,8 @@
     </style>
     <script>
         function createGame() {
-            fetch('https://gasgamebackend.sglombicki.com/createGame', {
+            var playercount = prompt("How many players?");
+            fetch('https://gasgamebackend.sglombicki.com/createGame?players='+playercount, {
                 credentials: 'include',
                 headers:{
                     'Cookie': document.cookie}
@@ -26,8 +27,7 @@
                 })
                 .then(data => {
                     // Display the JSON data in the HTML
-                    const container = document.getElementById('json-container');
-                    container.textContent = JSON.stringify(data, null, 2);
+                    alert("Game Created");
                 })
                 .catch(error => {
                     console.error('There has been a problem with your fetch operation:', error);
