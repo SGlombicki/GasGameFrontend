@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def updater():  # put application's code here
 	os.system('systemctl restart updater.service')
 	return 'Updating...'
