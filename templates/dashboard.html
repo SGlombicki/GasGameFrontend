@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Dashboard</title>
     <style>
@@ -20,7 +20,11 @@
 
     <script>
         // Fetch the JSON data from the endpoint
-        fetch('https://gasgamebackend.sglombicki.com/gameList')
+        fetch('https://gasgamebackend.sglombicki.com/gameList', {
+            credentials: 'include',
+                    headers:{
+                        'Cookie': document.cookie}
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
