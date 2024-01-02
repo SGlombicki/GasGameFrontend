@@ -15,6 +15,7 @@
         function createGame() {
             var playercount = prompt("How many players?");
             fetch('https://gasgamebackend.sglombicki.com/createGame?players='+playercount, {
+                method: 'POST',
                 credentials: 'include',
                 headers:{
                     'Cookie': document.cookie}
@@ -32,6 +33,7 @@
                 .catch(error => {
                     console.error('There has been a problem with your fetch operation:', error);
                 });
+            GenerateList();
         }
     </script>
 </head>
@@ -44,25 +46,28 @@
 
     <script>
         // Fetch the JSON data from the endpoint
-        fetch('https://gasgamebackend.sglombicki.com/gameList', {
-            credentials: 'include',
-                    headers:{
-                        'Cookie': document.cookie}
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        function GenerateList() {
+            fetch('https://gasgamebackend.sglombicki.com/gameList', {
+                credentials: 'include',
+                headers: {
+                    'Cookie': document.cookie
                 }
-                return response.json();
             })
-            .then(data => {
-                // Display the JSON data in the HTML
-                const container = document.getElementById('json-container');
-                container.textContent = JSON.stringify(data, null, 2);
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Display the JSON data in the HTML
+                    const container = document.getElementById('json-container');
+                    container.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
     </script>
 </body>
 </html>
