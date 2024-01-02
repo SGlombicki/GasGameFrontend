@@ -11,6 +11,29 @@
             background-color: #f9f9f9;
         }
     </style>
+    <script>
+        function createGame() {
+            fetch('https://gasgamebackend.sglombicki.com/createGame', {
+                credentials: 'include',
+                headers:{
+                    'Cookie': document.cookie}
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Display the JSON data in the HTML
+                    const container = document.getElementById('json-container');
+                    container.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+    </script>
 </head>
 <body>
     <h1>Game List</h1>
