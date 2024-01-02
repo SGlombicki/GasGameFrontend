@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():  # put application's code here
+	os.system('python3.10 ../update.py')
 	return 'Hello World!'
 
 @app.route('/login')
