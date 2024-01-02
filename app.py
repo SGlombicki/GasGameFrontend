@@ -4,9 +4,9 @@ import os
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():  # put application's code here
-	os.system('python3.10 ../update.py')
-	return 'Hello World!'
+def updater():  # put application's code here
+	os.system('systemctl restart updater.service')
+	return 'Updating...'
 
 @app.route('/login')
 def login():
