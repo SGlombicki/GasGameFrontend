@@ -9,8 +9,27 @@
             padding: 20px;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
+            overflow-y: scroll; /* Make the container scrollable */
+            height: 400px; /* Set a fixed height */
+        }
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        button {
+            margin-left: 10px;
         }
     </style>
+</head>
+<body>
+    <h1>Game List</h1>
+    <button onclick="createGame()">Create New Game</button>
+    <div id="json-container" class="json-container">
+        <!-- Game list will be displayed here -->
+    </div>
+
     <script>
         function createGame() {
             var playercount = prompt("How many players?");
@@ -20,32 +39,21 @@
                 headers:{
                     'Cookie': document.cookie}
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Display the JSON data in the HTML
-                    alert("Game Created");
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
-                });
-            GenerateList();
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Game Created");
+                GenerateList(); // Refresh the game list
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
         }
-    </script>
-</head>
-<body>
-    <h1>Game List</h1>
-    <button onclick="createGame()">Create New Game</button>
-    <div id="json-container" class="json-container">
-        <!-- JSON data will be displayed here -->
-    </div>
 
-    <script>
-        // Fetch the JSON data from the endpoint
         function GenerateList() {
             fetch('https://gasgamebackend.sglombicki.com/gameList', {
                 credentials: 'include',
@@ -53,21 +61,63 @@
                     'Cookie': document.cookie
                 }
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Display the JSON data in the HTML
-                    const container = document.getElementById('json-container');
-                    container.textContent = JSON.stringify(data, null, 2);
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('json-container');
+                container.innerHTML = ''; // Clear existing content
+                data.forEach(game => {
+                    const gameDiv = document.createElement('div');
+                    gameDiv.className = 'game-item';
+                    gameDiv.textContent = game.name; // Replace with actual game property
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => deleteGame(game.id));
+
+                    const customizeButton = document.createElement('button');
+                    customizeButton.textContent = 'Customize';
+                    customizeButton.addEventListener('click', () => customizeGame(game.id));
+
+                    const showPlayersButton = document.createElement('button');
+                    showPlayersButton.textContent = 'Show Players';
+                    showPlayersButton.addEventListener('click', () => showPlayers(game.id));
+
+                    gameDiv.appendChild(deleteButton);
+                    gameDiv.appendChild(customizeButton);
+                    gameDiv.appendChild(showPlayersButton);
+
+                    container.appendChild(gameDiv);
                 });
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
         }
+
+        function deleteGame(gameId) {
+            // Implement delete game logic
+            console.log("Delete game", gameId);
+            // After delete, refresh the list
+            GenerateList();
+        }
+
+        function customizeGame(gameId) {
+            // Implement customize game logic
+            console.log("Customize game", gameId);
+        }
+
+        function showPlayers(gameId) {
+            // Implement show players logic
+            console.log("Show players for game", gameId);
+        }
+
+        // Initial call to populate the list
+        GenerateList();
     </script>
 </body>
 </html>
